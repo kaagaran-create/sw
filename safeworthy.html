@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safeworthy – Aerospace Internal Audit & Safety Compliance</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Raleway:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --blue:#0277BD;
+  --blue-dark:#01579B;
+  --blue-mid:#0288D1;
+  --blue-light:#E1F5FE;
+  --blue-pale:#F0F8FF;
+  --blue-xlight:#EBF5FB;
+  --white:#ffffff;
+  --text-dark:#212121;
+  --text-mid:#37474F;
+  --text-muted:#607D8B;
+  --border:#B3E5FC;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Open Sans',sans-serif;color:var(--text-dark);background:#fff;line-height:1.7;}
+a{text-decoration:none;color:inherit;}
+ul{list-style:none;}
+
+/* TOP BAR */
+.topbar{background:var(--blue-dark);color:#fff;font-size:0.8rem;padding:6px 40px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.1);}
+.topbar-left{display:flex;gap:1.5rem;align-items:center;}
+.topbar-left a,.topbar-right a{color:rgba(255,255,255,0.85);transition:color .2s;}
+.topbar-left a:hover,.topbar-right a:hover{color:#fff;}
+.topbar-right{display:flex;gap:1.5rem;align-items:center;}
+.topbar-sep{color:rgba(255,255,255,0.3);}
+
+/* MAIN NAV */
+nav{background:#fff;box-shadow:0 2px 8px rgba(2,119,189,0.12);position:sticky;top:0;z-index:200;}
+.nav-inner{display:flex;align-items:stretch;justify-content:space-between;padding:0 40px;max-width:1400px;margin:0 auto;}
+.nav-logo{display:flex;align-items:center;padding:14px 0;font-family:'Raleway',sans-serif;font-size:1.65rem;font-weight:800;color:var(--blue-dark);letter-spacing:-0.02em;}
+.nav-logo span{color:var(--blue-mid);}
+.nav-menu{display:flex;align-items:stretch;}
+.nav-item{position:relative;}
+.nav-item>a{display:flex;align-items:center;gap:4px;padding:0 18px;height:100%;font-size:0.88rem;font-weight:600;color:var(--text-mid);letter-spacing:0.01em;transition:color .2s;border-bottom:3px solid transparent;}
+.nav-item>a:hover{color:var(--blue);border-bottom-color:var(--blue);}
+.nav-item>a .arr{font-size:0.6rem;color:var(--blue-mid);}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;min-width:260px;box-shadow:0 6px 24px rgba(2,119,189,0.18);border-top:3px solid var(--blue);z-index:300;}
+.nav-item:hover .dropdown{display:block;}
+.dropdown a{display:block;padding:11px 20px;font-size:0.84rem;color:var(--text-mid);border-bottom:1px solid #f0f0f0;transition:background .2s,color .2s;}
+.dropdown a:hover{background:var(--blue-light);color:var(--blue-dark);}
+
+/* HERO SLIDER */
+.hero{position:relative;height:580px;overflow:hidden;background:var(--blue-dark);}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;display:flex;align-items:center;}
+.slide.active{opacity:1;}
+.slide-bg{position:absolute;inset:0;background-size:cover;background-position:center;}
+.slide:nth-child(1) .slide-bg{background:linear-gradient(135deg,#01579B,#0277BD);}
+.slide:nth-child(2) .slide-bg{background:linear-gradient(135deg,#0277BD,#0288D1);}
+.slide:nth-child(3) .slide-bg{background:linear-gradient(135deg,#01579B,#0277BD);}
+.slide:nth-child(4) .slide-bg{background:linear-gradient(135deg,#0288D1,#0277BD);}
+.slide-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(1,69,155,0.80) 0%,rgba(2,119,189,0.45) 60%,rgba(2,119,189,0.05) 100%);}
+.slide-content{position:relative;z-index:2;max-width:620px;margin-left:10%;color:#fff;}
+.slide-content h1{font-family:'Raleway',sans-serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;line-height:1.2;margin-bottom:1.2rem;}
+.slide-content p{font-size:1rem;line-height:1.7;margin-bottom:2rem;color:rgba(255,255,255,0.9);}
+.btn-slide{display:inline-block;background:#fff;color:var(--blue-dark);padding:0.65rem 1.8rem;font-weight:700;font-size:0.88rem;letter-spacing:0.04em;text-transform:uppercase;transition:background .2s;}
+.btn-slide:hover{background:var(--blue-light);}
+.s-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:10;background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1.4rem;width:44px;height:44px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.s-arrow:hover{background:rgba(255,255,255,0.3);}
+.s-arrow.prev{left:20px;}
+.s-arrow.next{right:20px;}
+.s-dots{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10;}
+.dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.4);border:none;cursor:pointer;transition:background .2s;}
+.dot.active{background:#fff;}
+
+/* FEATURE BOXES */
+.feat-boxes{display:grid;grid-template-columns:repeat(4,1fr);border-top:4px solid var(--blue);background:#fff;box-shadow:0 4px 20px rgba(2,119,189,0.1);}
+.feat-box{padding:2rem 1.5rem;text-align:center;border-right:1px solid var(--border);transition:background .25s;cursor:pointer;}
+.feat-box:last-child{border-right:none;}
+.feat-box:hover{background:var(--blue-light);}
+.feat-icon{font-size:2.2rem;margin-bottom:0.8rem;color:var(--blue);}
+.feat-title{font-family:'Raleway',sans-serif;font-size:1rem;font-weight:800;color:var(--blue-dark);margin-bottom:0.3rem;}
+.feat-sub{font-size:0.8rem;color:var(--text-muted);}
+
+/* SHARED SECTION */
+.section{padding:70px 40px;}
+.inner{max-width:1200px;margin:0 auto;}
+.sec-head{text-align:center;margin-bottom:3rem;}
+.sec-lbl{font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--blue);font-weight:700;margin-bottom:0.5rem;}
+.sec-h2{font-family:'Raleway',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;color:var(--blue-dark);margin-bottom:0.5rem;}
+.sec-sub{font-size:0.95rem;color:var(--text-muted);}
+.divline{border:none;border-top:1px solid var(--border);margin:0;}
+.read-link{font-size:0.83rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.06em;border-bottom:2px solid var(--blue-mid);padding-bottom:1px;display:inline-block;transition:color .2s;}
+.read-link:hover{color:var(--blue-dark);}
+
+/* SERVICES */
+.svc-bg{background:var(--blue-pale);}
+.svc-grid{display:flex;flex-direction:column;gap:1px;background:var(--border);}
+.svc-card{display:grid;grid-template-columns:300px 1fr;background:#fff;}
+.svc-card:nth-child(even){direction:rtl;}
+.svc-card:nth-child(even)>*{direction:ltr;}
+.svc-img{background:var(--blue-xlight);display:flex;align-items:center;justify-content:center;min-height:200px;}
+.svc-img-in{display:flex;flex-direction:column;align-items:center;gap:0.5rem;color:var(--blue);}
+.svc-img-icon{font-size:3.5rem;}
+.svc-img-tag{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue-mid);font-weight:700;}
+.svc-text{padding:2.2rem 2.5rem;}
+.svc-h3{font-family:'Raleway',sans-serif;font-size:1.2rem;font-weight:800;color:var(--blue-dark);margin-bottom:0.2rem;}
+.svc-h4{font-size:0.88rem;color:var(--blue-mid);font-weight:600;margin-bottom:0.9rem;}
+.svc-p{font-size:0.9rem;color:var(--text-mid);line-height:1.75;margin-bottom:1.2rem;}
+
+/* VIDEO */
+.vid-sec{background:#fff;padding:70px 40px;}
+.vid-inner{max-width:900px;margin:0 auto;text-align:center;}
+.vid-wrap{margin-top:2rem;background:var(--blue-xlight);border:2px solid var(--border);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer;}
+.play-btn{width:80px;height:80px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.8rem;transition:transform .2s,background .2s;}
+.vid-wrap:hover .play-btn{transform:scale(1.1);background:var(--blue-dark);}
+
+/* ABOUT */
+.abt-bg{background:var(--blue-pale);}
+.abt-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:5rem;align-items:start;}
+.abt-p{font-size:0.95rem;color:var(--text-mid);line-height:1.8;margin-bottom:1.2rem;}
+.abt-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:0.5rem;}
+.abt-col{text-align:center;}
+.abt-icon{font-size:2.5rem;color:var(--blue);margin-bottom:0.8rem;}
+.abt-ctitle{font-family:'Raleway',sans-serif;font-size:0.95rem;font-weight:800;color:var(--blue-dark);margin-bottom:0.5rem;}
+.abt-ctext{font-size:0.83rem;color:var(--text-muted);line-height:1.65;}
+
+/* COURSES (Publications) */
+.courses-sec{background:#fff;padding:70px 40px;}
+.courses-inner{max-width:1200px;margin:0 auto;}
+.courses-head{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;margin-bottom:3rem;}
+.crs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;}
+.crs-card{border:1px solid var(--border);overflow:hidden;transition:box-shadow .25s;}
+.crs-card:hover{box-shadow:0 6px 24px rgba(2,119,189,0.18);}
+.crs-img{height:180px;background:var(--blue-xlight);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;border-bottom:1px solid var(--border);}
+.crs-icon{font-size:2.8rem;color:var(--blue);}
+.crs-code{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue-mid);font-weight:700;}
+.crs-body{padding:1rem 1.2rem;}
+.crs-title{font-family:'Raleway',sans-serif;font-size:0.92rem;font-weight:800;color:var(--blue-dark);margin-bottom:0.4rem;}
+.crs-sub{font-size:0.78rem;color:var(--text-muted);}
+
+/* TESTIMONIALS */
+.testi-bg{background:var(--blue-pale);padding:70px 40px;}
+.testi-inner{max-width:1100px;margin:0 auto;}
+.testi-list{display:flex;flex-direction:column;gap:1.5rem;margin-top:2.5rem;}
+.testi{background:#fff;border-left:4px solid var(--blue);padding:1.5rem 2rem;font-size:0.9rem;color:var(--text-mid);line-height:1.75;font-style:italic;}
+.testi-auth{margin-top:0.8rem;font-style:normal;font-weight:700;font-size:0.85rem;color:var(--blue-dark);}
+
+/* INSIGHTS */
+.ins-sec{background:#fff;padding:70px 40px;}
+.ins-inner{max-width:1200px;margin:0 auto;}
+.ins-tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:2.5rem;}
+.ins-tab{padding:0.6rem 1.4rem;font-size:0.85rem;font-weight:700;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .2s;}
+.ins-tab.active,.ins-tab:hover{color:var(--blue);border-bottom-color:var(--blue);}
+.ins-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;}
+.ins-card{border:1px solid var(--border);overflow:hidden;transition:box-shadow .25s;}
+.ins-card:hover{box-shadow:0 4px 16px rgba(2,119,189,0.14);}
+.ins-img{height:160px;background:var(--blue-xlight);display:flex;align-items:center;justify-content:center;color:var(--blue);font-size:2.5rem;border-bottom:1px solid var(--border);}
+.ins-body{padding:1.2rem;}
+.ins-title{font-family:'Raleway',sans-serif;font-size:0.95rem;font-weight:800;color:var(--blue-dark);margin-bottom:0.4rem;}
+.ins-meta{font-size:0.75rem;color:var(--text-muted);margin-bottom:0.7rem;}
+.ins-exc{font-size:0.83rem;color:var(--text-mid);line-height:1.65;}
+
+/* CTA BANNER */
+.cta{background:var(--blue);color:#fff;padding:50px 40px;text-align:center;}
+.cta h2{font-family:'Raleway',sans-serif;font-size:1.6rem;font-weight:800;margin-bottom:0.5rem;}
+.cta-tag{font-size:0.95rem;opacity:0.75;margin-bottom:1rem;letter-spacing:0.04em;}
+.cta p{font-size:0.9rem;color:rgba(255,255,255,0.85);margin-bottom:1.5rem;}
+.btn-wh{display:inline-block;background:#fff;color:var(--blue-dark);padding:0.7rem 2.2rem;font-weight:700;font-size:0.88rem;letter-spacing:0.04em;text-transform:uppercase;transition:background .2s;}
+.btn-wh:hover{background:var(--blue-light);}
+
+/* FOOTER */
+footer{background:var(--blue-dark);color:rgba(255,255,255,0.85);padding:50px 40px 0;}
+.foot-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2.5rem;max-width:1200px;margin:0 auto;padding-bottom:2.5rem;border-bottom:1px solid rgba(255,255,255,0.12);}
+.foot-col h5{font-family:'Raleway',sans-serif;font-size:0.85rem;font-weight:800;color:#fff;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1rem;}
+.foot-col p,.foot-col a{display:block;font-size:0.83rem;line-height:1.9;color:rgba(255,255,255,0.72);transition:color .2s;}
+.foot-col a:hover{color:#fff;}
+.soc{display:flex;gap:0.7rem;margin-top:0.5rem;}
+.soc-btn{width:36px;height:36px;border:1px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;font-size:1rem;color:rgba(255,255,255,0.8);transition:background .2s,color .2s;}
+.soc-btn:hover{background:rgba(255,255,255,0.15);color:#fff;}
+.foot-bot{max-width:1200px;margin:0 auto;padding:1.2rem 0;display:flex;align-items:center;justify-content:space-between;font-size:0.8rem;color:rgba(255,255,255,0.5);}
+.foot-logo{font-family:'Raleway',sans-serif;font-size:1.3rem;font-weight:800;color:#fff;}
+.foot-logo span{color:#90CAF9;}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .abt-grid{grid-template-columns:1fr;gap:2.5rem;}
+  .abt-cols{grid-template-columns:1fr 1fr;}
+  .crs-grid{grid-template-columns:repeat(2,1fr);}
+  .foot-grid{grid-template-columns:repeat(2,1fr);}
+  .courses-head{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  .topbar{display:none;}
+  .nav-inner{padding:0 20px;}
+  .feat-boxes{grid-template-columns:repeat(2,1fr);}
+  .svc-card{grid-template-columns:1fr;}
+  .svc-card:nth-child(even){direction:ltr;}
+  .ins-grid{grid-template-columns:1fr;}
+  .foot-grid{grid-template-columns:1fr;}
+  .section,.vid-sec,.abt-bg,.courses-sec,.testi-bg,.ins-sec{padding:50px 20px;}
+  .hero{height:460px;}
+  .cta{padding:40px 20px;}
+}
+@media(max-width:480px){
+  .crs-grid{grid-template-columns:1fr;}
+  .feat-boxes{grid-template-columns:1fr;}
+  .abt-cols{grid-template-columns:1fr;}
+  .slide-content{margin-left:5%;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP UTILITY BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="tel:+91 909-4004-54">&#9742; +91 909-4004-54 </a>
+    <span class="topbar-sep">|</span>
+    <a href="mailto:info@safeworthy.com">info@safeworthy.com</a>
+  </div>
+  <div class="topbar-right">
+    <a href="#contact">Contact</a>
+    <span class="topbar-sep">|</span>
+    <a href="#">Customer Login</a>
+    <span class="topbar-sep">|</span>
+    <a href="#">&#127760; EN</a>
+  </div>
+</div>
+
+<!-- MAIN NAVIGATION -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Safe<span>worthy</span></a>
+    <ul class="nav-menu">
+      <li class="nav-item"><a href="#services">Internal Audits</a></li>
+      <li class="nav-item">
+        <a href="#services">Trainings <span class="arr">&#9660;</span></a>
+        <div class="dropdown">
+          <a href="#">FOD Prevention Training</a>
+          <a href="#">Internal Auditor Training</a>
+          <a href="#">AS9100 Auditor Training</a>
+          <a href="#">EASA Compliance Training</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="#courses">E-Learnings <span class="arr">&#9660;</span></a>
+        <div class="dropdown">
+          <a href="#">FOD Awareness – Online</a>
+          <a href="#">Internal Audit Basics – Online</a>
+          <a href="#">AS9100 Fundamentals – Online</a>
+          <a href="#">EASA Part 145 – Online</a>
+          <a href="#">Safety Management – Online</a>
+          <a href="#">QMS Essentials – Online</a>
+        </div>
+      </li>
+      <li class="nav-item"><a href="#insights">Insights</a></li>
+      <li class="nav-item"><a href="#about">About Us</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO SLIDER -->
+<div class="hero" id="home">
+  <div class="slide active">
+    <div class="slide-bg"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <h1>Practice-oriented Internal Audit Training</h1>
+      <p>Safeworthy delivers expert-led, online internal audit programmes for the aerospace and aviation sector — built around real-world audit scenarios and regulatory requirements.</p>
+      <a href="#services" class="btn-slide">Read more</a>
+    </div>
+  </div>
+  <div class="slide">
+    <div class="slide-bg"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <h1>FOD Prevention — Trained by Aviation Specialists</h1>
+      <p>Our FOD Prevention & Control programmes equip teams with the knowledge to identify, prevent, and manage Foreign Object Debris risks across aerospace facilities.</p>
+      <a href="#services" class="btn-slide">Read more</a>
+    </div>
+  </div>
+  <div class="slide">
+    <div class="slide-bg"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <h1>Aerospace Safety Compliance — AS9100 & EASA</h1>
+      <p>Structured training to help organisations align with AS9100, EASA, and international safety management requirements — audit-ready from day one.</p>
+      <a href="#services" class="btn-slide">Read more</a>
+    </div>
+  </div>
+  <div class="slide">
+    <div class="slide-bg"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <h1>E-Learning — Audit. Comply. Excel.</h1>
+      <p>Safeworthy's digital learning platform brings aerospace audit training to your team — anywhere, anytime. Simple. Self-paced. Certified.</p>
+      <a href="#courses" class="btn-slide">Click here</a>
+    </div>
+  </div>
+  <button class="s-arrow prev" onclick="changeSlide(-1)">&#10094;</button>
+  <button class="s-arrow next" onclick="changeSlide(1)">&#10095;</button>
+  <div class="s-dots">
+    <button class="dot active" onclick="goSlide(0)"></button>
+    <button class="dot" onclick="goSlide(1)"></button>
+    <button class="dot" onclick="goSlide(2)"></button>
+    <button class="dot" onclick="goSlide(3)"></button>
+  </div>
+</div>
+
+<!-- FEATURE BOXES -->
+<div class="feat-boxes">
+  <div class="feat-box">
+    <div class="feat-icon">&#128269;</div>
+    <div class="feat-title">FOD Prevention</div>
+    <div class="feat-sub">Detect – We identify foreign object risks</div>
+  </div>
+  <div class="feat-box">
+    <div class="feat-icon">&#9989;</div>
+    <div class="feat-title">Internal Audits</div>
+    <div class="feat-sub">Assess – We evaluate your systems</div>
+  </div>
+  <div class="feat-box">
+    <div class="feat-icon">&#128203;</div>
+    <div class="feat-title">Compliance</div>
+    <div class="feat-sub">Certify – We align you with standards</div>
+  </div>
+  <div class="feat-box">
+    <div class="feat-icon">&#127891;</div>
+    <div class="feat-title">E-Learning</div>
+    <div class="feat-sub">Learn – We digitalize your training</div>
+  </div>
+</div>
+
+<hr class="divline">
+
+<!-- SERVICES -->
+<div class="section svc-bg" id="services">
+  <div class="inner">
+    <div class="sec-head">
+      <div class="sec-h2">Services</div>
+      <div class="sec-sub">What we can help you with</div>
+    </div>
+    <div class="svc-grid">
+
+      <div class="svc-card">
+        <div class="svc-img"><div class="svc-img-in"><div class="svc-img-icon">&#128269;</div><div class="svc-img-tag">FOD Control</div></div></div>
+        <div class="svc-text">
+          <div class="svc-h3">FOD Prevention & Control</div>
+          <div class="svc-h4">Detect – Prevent – Protect</div>
+          <p class="svc-p">Safeworthy is your specialist contact for Foreign Object Debris and Damage management in aerospace. Our programmes cover FOD awareness, practical inspection techniques, and workplace control systems — aligned with industry standards and regulatory requirements. No matter where your facilities are in their FOD maturity, we bring your teams safely to best practice.</p>
+          <a href="#" class="read-link">Read more</a>
+        </div>
+      </div>
+
+      <div class="svc-card">
+        <div class="svc-img"><div class="svc-img-in"><div class="svc-img-icon">&#9989;</div><div class="svc-img-tag">Internal Audit</div></div></div>
+        <div class="svc-text">
+          <div class="svc-h3">Internal Audit Training</div>
+          <div class="svc-h4">Individual, practice-oriented training</div>
+          <p class="svc-p">When it comes to internal audit training in aerospace, Safeworthy is one of the most comprehensive online providers available. Our courses cover audit planning, execution, nonconformance reporting, and corrective action follow-up. Training courses help your teams master aerospace quality management and internal audit requirements with confidence.</p>
+          <a href="#" class="read-link">Read more</a>
+        </div>
+      </div>
+
+      <div class="svc-card">
+        <div class="svc-img"><div class="svc-img-in"><div class="svc-img-icon">&#128203;</div><div class="svc-img-tag">Compliance</div></div></div>
+        <div class="svc-text">
+          <div class="svc-h3">Aerospace Safety Compliance</div>
+          <div class="svc-h4">Know-how transfer inclusive</div>
+          <p class="svc-p">Safety compliance and AS9100 / EASA alignment are our speciality. We provide structured online training covering regulatory requirements, audit obligations, and implementation approaches. Safeworthy supports aerospace organisations worldwide in achieving and maintaining full compliance — with expert knowledge transfer built into every module.</p>
+          <a href="#" class="read-link">Read more</a>
+        </div>
+      </div>
+
+      <div class="svc-card">
+        <div class="svc-img"><div class="svc-img-in"><div class="svc-img-icon">&#127891;</div><div class="svc-img-tag">E-Learning</div></div></div>
+        <div class="svc-text">
+          <div class="svc-h3">E-Learning & Knowledge Management</div>
+          <div class="svc-h4">Computer Based Training</div>
+          <p class="svc-p">Through our online platform, Safeworthy offers organisations a modern form of aerospace knowledge transfer and personnel qualification. With video-animated e-learning modules, your employees learn through engaging infotainment. Organisations can also use our platform to plan, manage, and track qualification measures across their teams at scale.</p>
+          <a href="#" class="read-link">Read more</a>
+        </div>
+      </div>
+
+      <div class="svc-card">
+        <div class="svc-img"><div class="svc-img-in"><div class="svc-img-icon">&#128736;</div><div class="svc-img-tag">QMS</div></div></div>
+        <div class="svc-text">
+          <div class="svc-h3">Quality Management Systems</div>
+          <div class="svc-h4">Consulting – Support – Training</div>
+          <p class="svc-p">For organisations whose core focus is not aerospace, the regulatory density of quality management requirements can be a considerable challenge. Safeworthy supports you in understanding and implementing QMS frameworks that meet EN 9100 and EASA criteria — with training precisely tailored to your organisational context and operational reality.</p>
+          <a href="#" class="read-link">Read more</a>
+        </div>
+      </div>
+
+      <div class="svc-card">
+        <div class="svc-img"><div class="svc-img-in"><div class="svc-img-icon">&#127758;</div><div class="svc-img-tag">Standards</div></div></div>
+        <div class="svc-text">
+          <div class="svc-h3">Regulatory Standards Coverage</div>
+          <div class="svc-h4">AS9100 – EASA – ISO 9001 – SMS</div>
+          <p class="svc-p">As one of the specialist online providers for aerospace audit and compliance training, Safeworthy covers a broad range of international regulatory standards. We support your teams in understanding and sustaining compliance across AS9100, EASA Part 21 & Part 145, Safety Management System frameworks, and ISO 9001 quality management baselines.</p>
+          <a href="#" class="read-link">Read more</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<hr class="divline">
+
+<!-- VIDEO PORTRAIT -->
+<div class="vid-sec" id="video">
+  <div class="vid-inner">
+    <div class="sec-head">
+      <div class="sec-h2">Video Portrait</div>
+      <div class="sec-sub">Get to know us in 2 minutes!</div>
+    </div>
+    <p style="font-size:0.95rem;color:var(--text-mid);max-width:680px;margin:0 auto 0.5rem;">
+      Safeworthy is an established specialist in online aerospace internal audit and safety compliance training. Learn more about who we are, what drives us, and how our programmes can support your organisation in our company overview.
+    </p>
+    <div class="vid-wrap">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,#E1F5FE,#B3E5FC);opacity:0.7;"></div>
+      <div class="play-btn">&#9654;</div>
+    </div>
+  </div>
+</div>
+
+<hr class="divline">
+
+<!-- ABOUT -->
+<div class="section abt-bg" id="about">
+  <div class="inner">
+    <div class="abt-grid">
+      <div>
+        <div class="sec-h2" style="font-family:'Raleway',sans-serif;color:var(--blue-dark);margin-bottom:1rem;">About Safeworthy</div>
+        <p class="abt-p">Safeworthy is one of the leading online training providers for aerospace internal audit and safety compliance. Our team of experienced audit professionals has developed programmes that reflect the real-world demands of aviation operations, supply chains, and regulatory oversight.</p>
+        <p class="abt-p">Aerospace manufacturers, MRO facilities, quality managers, and compliance teams worldwide rely on Safeworthy to build genuine audit competency — not just theoretical knowledge. We have first-class references from organisations that have achieved audit-ready status through our programmes.</p>
+        <a href="#" class="read-link">Read more</a>
+      </div>
+      <div class="abt-cols">
+        <div class="abt-col">
+          <div class="abt-icon">&#9992;</div>
+          <div class="abt-ctitle">Our Offer</div>
+          <div class="abt-ctext">We train quality managers, internal auditors, and aerospace personnel on FOD, AS9100, EASA, and SMS — through structured online courses accessible worldwide.</div>
+        </div>
+        <div class="abt-col">
+          <div class="abt-icon">&#127919;</div>
+          <div class="abt-ctitle">Our Goal</div>
+          <div class="abt-ctext">We develop programmes individually tailored to aerospace realities. Our goal: measurable audit competency improvement — not just certificates, but real capability embedded in your teams.</div>
+        </div>
+        <div class="abt-col">
+          <div class="abt-icon">&#128200;</div>
+          <div class="abt-ctitle">What Distinguishes Us</div>
+          <div class="abt-ctext">The Safeworthy team combines deep aerospace regulatory knowledge with expert instructional design — delivering engaging, accurate courses that are immediately applicable in live audit environments.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divline">
+
+<!-- COURSES (Publications equivalent) -->
+<div class="courses-sec" id="courses">
+  <div class="courses-inner">
+    <div class="courses-head">
+      <div>
+        <div class="sec-lbl" style="text-align:left;">Our Online Courses</div>
+        <div class="sec-h2" style="text-align:left;">Testimony to Our Expertise</div>
+      </div>
+      <div>
+        <p style="font-size:0.9rem;color:var(--text-mid);line-height:1.8;">Our competence is evident in our course catalogue. As guides for auditors, specialists, or beginners — our programmes provide not just an overview of aerospace regulatory topics but also practical, actionable training that creates measurable results for everyday audit operations. Depending on the subject, courses are suitable for experts and newcomers alike.</p>
+        <a href="#" class="read-link" style="margin-top:1rem;display:inline-block;">View all courses</a>
+      </div>
+    </div>
+    <div class="crs-grid">
+      <div class="crs-card"><div class="crs-img"><div class="crs-icon">&#128269;</div><div class="crs-code">FOD-101</div></div><div class="crs-body"><div class="crs-title">FOD Prevention & Control – Online</div><div class="crs-sub">Foreign Object Debris fundamentals for aerospace facilities</div></div></div>
+      <div class="crs-card"><div class="crs-img"><div class="crs-icon">&#9989;</div><div class="crs-code">IA-201</div></div><div class="crs-body"><div class="crs-title">Internal Auditor Essentials – Online</div><div class="crs-sub">Plan, execute, and report internal audits with confidence</div></div></div>
+      <div class="crs-card"><div class="crs-img"><div class="crs-icon">&#128203;</div><div class="crs-code">AS-301</div></div><div class="crs-body"><div class="crs-title">AS9100 Fundamentals – Online</div><div class="crs-sub">Quality management system requirements for aerospace</div></div></div>
+      <div class="crs-card"><div class="crs-img"><div class="crs-icon">&#127977;</div><div class="crs-code">EASA-145</div></div><div class="crs-body"><div class="crs-title">EASA Part 145 – Online</div><div class="crs-sub">Maintenance organisation regulatory requirements</div></div></div>
+      <div class="crs-card"><div class="crs-img"><div class="crs-icon">&#9728;</div><div class="crs-code">SMS-401</div></div><div class="crs-body"><div class="crs-title">Safety Management Training – Online</div><div class="crs-sub">SMS frameworks for aviation organisations</div></div></div>
+      <div class="crs-card"><div class="crs-img"><div class="crs-icon">&#128736;</div><div class="crs-code">QMS-501</div></div><div class="crs-body"><div class="crs-title">QMS Essentials – Online</div><div class="crs-sub">ISO 9001-aligned quality management for aerospace teams</div></div></div>
+      <div class="crs-card"><div class="crs-img"><div class="crs-icon">&#9997;</div><div class="crs-code">IA-601</div></div><div class="crs-body"><div class="crs-title">Audit Reporting & NCR Writing – Online</div><div class="crs-sub">Nonconformance documentation and corrective action</div></div></div>
+      <div class="crs-card"><div class="crs-img"><div class="crs-icon">&#127891;</div><div class="crs-code">MORE</div></div><div class="crs-body"><div class="crs-title">More Courses Available</div><div class="crs-sub">Further online courses for aerospace professionals on our portal</div></div></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divline">
+
+<!-- TESTIMONIALS -->
+<div class="testi-bg">
+  <div class="testi-inner">
+    <div class="sec-head">
+      <div class="sec-h2">What Our Learners Say</div>
+    </div>
+    <div class="testi-list">
+      <div class="testi">
+        "Safeworthy's internal audit course gave our quality team exactly the practical structure they needed. The video modules were genuinely engaging and the examples were drawn from real aerospace environments — not generic compliance theory. We completed our first internal audit cycle within weeks of finishing the programme."
+        <div class="testi-auth">Quality Manager, Tier-1 Aerospace Supplier</div>
+      </div>
+      <div class="testi">
+        "The FOD Prevention course was outstanding. Our shop floor team responded extremely well to the video-based format, and the scenario-based assessments tested real understanding rather than memorisation. We have now embedded it into our new-joiner onboarding process as a mandatory qualification step."
+        <div class="testi-auth">Head of Production, MRO Facility</div>
+      </div>
+      <div class="testi">
+        "We used Safeworthy to prepare our internal auditors ahead of our AS9100 surveillance audit. The course content was accurate, well-structured, and aligned precisely with what our certification body was looking for. Our team completed it confident and ready — we passed with zero major nonconformances."
+        <div class="testi-auth">QMS Representative, Aerospace Components Manufacturer</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divline">
+
+<!-- INSIGHTS -->
+<div class="ins-sec" id="insights">
+  <div class="ins-inner">
+    <div class="sec-head">
+      <div class="sec-h2">Insights</div>
+      <div class="sec-sub">Articles and news</div>
+    </div>
+    <div class="ins-tabs">
+      <div class="ins-tab active">All</div>
+      <div class="ins-tab">Insights</div>
+    </div>
+    <div class="ins-grid">
+      <div class="ins-card">
+        <div class="ins-img">&#128269;</div>
+        <div class="ins-body">
+          <div class="ins-title">FOD Control in Aerospace Manufacturing — Key Principles</div>
+          <div class="ins-meta">15 March 2026 | Insights</div>
+          <div class="ins-exc">Foreign Object Debris control is one of the most critical yet underestimated disciplines in aerospace production. A robust FOD programme requires culture, process, and continuous internal audit oversight...</div>
+        </div>
+      </div>
+      <div class="ins-card">
+        <div class="ins-img">&#128203;</div>
+        <div class="ins-body">
+          <div class="ins-title">AS9100 Internal Audit — What Auditors Miss Most Often</div>
+          <div class="ins-meta">10 January 2026 | Insights</div>
+          <div class="ins-exc">Internal audits under AS9100 frequently overlook process effectiveness in favour of procedural conformance. Here is what experienced aerospace auditors consistently look for during surveillance...</div>
+        </div>
+      </div>
+      <div class="ins-card">
+        <div class="ins-img">&#9992;</div>
+        <div class="ins-body">
+          <div class="ins-title">EASA Compliance Training — Online vs. Classroom</div>
+          <div class="ins-meta">5 November 2025 | Insights</div>
+          <div class="ins-exc">As aviation organisations adopt digital learning, the question arises: can online EASA compliance training match the depth of classroom instruction? The evidence is increasingly clear...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA BANNER -->
+<div class="cta" id="contact">
+  <h2>We support you with your compliance challenges</h2>
+  <p class="cta-tag">reliable &bull; practical &bull; aerospace-focused</p>
+  <p>Start your audit training today or reach out to discuss your organisation's specific needs.</p>
+  <a href="mailto:info@safeworthy.com" class="btn-wh">Contact now</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h5>Contact</h5>
+      <p><strong style="color:#fff;">Safeworthy</strong></p>
+      <p>info@safeworthy.com</p>
+      <p>+91 909-4004-54</p>
+      <br>
+      <p>Response within 1 business day</p>
+    </div>
+    <div class="foot-col">
+      <h5>Services</h5>
+      <a href="#">FOD Prevention & Control</a>
+      <a href="#">Internal Audit Training</a>
+      <a href="#">Aerospace Safety Compliance</a>
+      <a href="#">Quality Management Systems</a>
+      <a href="#">E-Learning Courses</a>
+    </div>
+    <div class="foot-col">
+      <h5>Follow us on</h5>
+      <div class="soc">
+        <a href="#" class="soc-btn">&#9654;</a>
+        <a href="#" class="soc-btn">in</a>
+        <a href="#" class="soc-btn">&#120143;</a>
+      </div>
+    </div>
+    <div class="foot-col">
+      <h5>Information</h5>
+      <a href="#">Privacy Policy</a>
+      <a href="#contact">Contact</a>
+      <a href="#">Imprint</a>
+      <a href="#">Customer Portal</a>
+    </div>
+  </div>
+  <div class="foot-bot">
+    <div class="foot-logo">Safe<span>worthy</span></div>
+    <div>&#169; 2026 Safeworthy – Aerospace Internal Audit &amp; Safety Compliance Training</div>
+  </div>
+</footer>
+
+<script>
+let cur=0;
+const slides=document.querySelectorAll('.slide');
+const dots=document.querySelectorAll('.dot');
+let t;
+function show(n){
+  slides[cur].classList.remove('active');dots[cur].classList.remove('active');
+  cur=(n+slides.length)%slides.length;
+  slides[cur].classList.add('active');dots[cur].classList.add('active');
+}
+function changeSlide(d){clearInterval(t);show(cur+d);start();}
+function goSlide(n){clearInterval(t);show(n);start();}
+function start(){t=setInterval(()=>show(cur+1),5000);}
+start();
+document.querySelectorAll('.ins-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.ins-tab').forEach(x=>x.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
